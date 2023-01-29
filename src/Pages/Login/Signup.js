@@ -2,30 +2,45 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 
-const Login = () => {
+const Signup = () => {
     const { register, formState: { errors }, handleSubmit } = useForm();
     let signInError;
-    const onSubmit = async data => {
-        const res = await fetch(
-            'http://localhost:5000/api/login',
-            {
-                method: 'POST',
-                headers: {
-                    'content-type': 'application/json',
-                },
-                body: JSON.stringify(data)
-            }
-        );
-        const result = await res.json(); 
-        console.log(result)
+    const onSubmit = async data=> {
+       
+            const res = await fetch(
+                'http://localhost:5000/api/registration',
+                {
+                    method: 'PUT',
+                    headers: {
+                        'content-type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                }
+            );
+            const result = await res.json(); 
+            console.log(result)
     };
-
     return (
         <div className='flex h-screen justify-center items-center '>
             <div className="card w-96 bg-base-100 shadow-xl">
                 <div className="card-body">
-                    <h2 className="text-center text-secondary text-2xl font-bold">Login</h2>
+                    <h2 className="text-center text-secondary text-2xl font-bold">Sign Up</h2>
                     <form onSubmit={handleSubmit(onSubmit)}>
+                        <div className="form-control w-full max-w-xs">
+                            <label className="label">
+                                <span className="label-text">Name</span>
+                            </label>
+                            <input {...register("name", {
+                                required: {
+                                    value: true,
+                                    message: 'Name is required'
+                                }
+                            })} type="text" placeholder="name" className="input input-bordered w-full max-w-xs" />
+                            <label className="label">
+                                {errors.name?.type === 'required' && <span className="label-text-alt text-red-600">{errors.name.message}</span>}
+
+                            </label>
+                        </div>
                         <div className="form-control w-full max-w-xs">
                             <label className="label">
                                 <span className="label-text">Email</span>
@@ -66,9 +81,9 @@ const Login = () => {
                             </label> */}
                         </div>
                         {signInError}
-                        <input type="submit" className='btn btn-accent w-full max-w-xs' value='Login' />
+                        <input type="submit" className='btn btn-accent w-full max-w-xs' value='Sign Up' />
                     </form>
-                    <p><small>New in Power-Hack ? <Link to='/signup' className='text-secondary'>Create an Account</Link></small></p>
+                    <p><small>Already in Power-Hack ? <Link to='/login' className='text-secondary'>Please login</Link></small></p>
                     
                 </div>
             </div>
@@ -76,4 +91,4 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default Signup;

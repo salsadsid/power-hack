@@ -1,7 +1,14 @@
 import React from 'react';
+import { useQuery } from 'react-query';
+import BillModal from './BillModal';
 
 const Bill = () => {
+    const { data: bills, isLoading, refetch } = useQuery('orders', () => fetch(``).then(res => res.json())
+    )
     return (
+        <div> 
+            <label htmlFor="billing-modal" className="btn">open modal</label>
+            <BillModal></BillModal>
         <div className="overflow-x-auto">
         <table className="table table-compact w-full">
           <thead>
@@ -216,6 +223,7 @@ const Bill = () => {
   <button className="btn">3</button>
   <button className="btn">4</button>
 </div>
+      </div>
       </div>
     );
 };
