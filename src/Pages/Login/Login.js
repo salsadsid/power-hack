@@ -1,25 +1,17 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { login } from '../../features/auth/authSlice';
 
 const Login = () => {
     const { register, formState: { errors }, handleSubmit } = useForm();
+    const dispatch = useDispatch()
     let signInError;
     const onSubmit = async data => {
-        const res = await fetch(
-            'http://localhost:5000/api/login',
-            {
-                method: 'POST',
-                headers: {
-                    'content-type': 'application/json',
-                },
-                body: JSON.stringify(data)
-            }
-        );
-        const result = await res.json(); 
-        console.log(result)
+        dispatch(login(data))
+        
     };
-
     return (
         <div className='flex h-screen justify-center items-center '>
             <div className="card w-96 bg-base-100 shadow-xl">

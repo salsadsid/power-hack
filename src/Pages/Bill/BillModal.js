@@ -9,7 +9,7 @@ const handleBill=(event)=>{
             paidAmount:event.target.payable.value
         }
         console.log(bill)
-        fetch('http://localhost:5000/api/billing-list', {
+        fetch('http://localhost:5000/api/add-billing', {
             method: 'POST',
             headers: {
                 'content-type': 'application/json'

@@ -1,24 +1,28 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { createUser } from '../../features/auth/authSlice';
 
 const Signup = () => {
     const { register, formState: { errors }, handleSubmit } = useForm();
+    const dispatch =useDispatch()
     let signInError;
     const onSubmit = async data=> {
        
-            const res = await fetch(
-                'http://localhost:5000/api/registration',
-                {
-                    method: 'PUT',
-                    headers: {
-                        'content-type': 'application/json',
-                    },
-                    body: JSON.stringify(data)
-                }
-            );
-            const result = await res.json(); 
-            console.log(result)
+            // const res = await fetch(
+            //     'http://localhost:5000/api/registration',
+            //     {
+            //         method: 'PUT',
+            //         headers: {
+            //             'content-type': 'application/json',
+            //         },
+            //         body: JSON.stringify(data)
+            //     }
+            // );
+            // const result = await res.json(); 
+        dispatch(createUser(data))
+            
     };
     return (
         <div className='flex h-screen justify-center items-center '>
