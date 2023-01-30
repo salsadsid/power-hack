@@ -3,6 +3,7 @@ import Main from "../../Layout/Main"
 import Bill from "../../Pages/Bill/Bill";
 import Home from "../../Pages/Home/Home"
 import Login from "../../Pages/Login/Login";
+import RequireAuth from "../../Pages/Login/RequireAuth";
 import Signup from "../../Pages/Login/Signup";
 
 const router = createBrowserRouter([
@@ -20,7 +21,11 @@ const router = createBrowserRouter([
         },
         {
             path:'/bill',
-            element:<Bill></Bill>
+            element:(<RequireAuth>
+            <Bill></Bill>
+            </RequireAuth>
+            )
+
         },
         {
             path:'/signup',

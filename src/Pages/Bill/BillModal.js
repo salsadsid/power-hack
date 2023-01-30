@@ -9,7 +9,7 @@ const handleBill=(event)=>{
             paidAmount:event.target.payable.value
         }
         console.log(bill)
-        fetch('http://localhost:5000/api/add-billing', {
+        fetch('https://power-hack-server-abjy.onrender.com/api/add-billing', {
             method: 'POST',
             headers: {
                 'content-type': 'application/json'

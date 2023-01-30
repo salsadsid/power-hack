@@ -1,13 +1,24 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { login } from '../../features/auth/authSlice';
 
 const Login = () => {
+    
+  const { isLoading, user, isError, error } = useSelector(state => state.auth)
     const { register, formState: { errors }, handleSubmit } = useForm();
     const dispatch = useDispatch()
+    const navigate=useNavigate()
+    const location =useLocation()
     let signInError;
+    let from = location.state?.from?.pathname || "/";
+    console.log(user)
+    useEffect(() => {
+        if (user.email) {
+            navigate(from, { replace: true });
+        }
+    }, [user.email, navigate, from])
     const onSubmit = async data => {
         dispatch(login(data))
         

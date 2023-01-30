@@ -11,7 +11,7 @@ const Signup = () => {
     const onSubmit = async data=> {
        
             // const res = await fetch(
-            //     'http://localhost:5000/api/registration',
+            //     'https://power-hack-server-abjy.onrender.com/api/registration',
             //     {
             //         method: 'PUT',
             //         headers: {

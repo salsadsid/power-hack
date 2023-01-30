@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { useQuery } from "react-query";
 const initialState = {
     user: {
         email: "",
@@ -10,7 +11,7 @@ const initialState = {
 }
 export const createUser = createAsyncThunk('auth/createUser', async (data) => {
     const res = await fetch(
-        'http://localhost:5000/api/registration',
+        'https://power-hack-server-abjy.onrender.com/api/registration',
         {
             method: 'PUT',
             headers: {
@@ -28,7 +29,7 @@ export const createUser = createAsyncThunk('auth/createUser', async (data) => {
 
 export const login = createAsyncThunk('auth/login',async(data)=>{
     const res = await fetch(
-        'http://localhost:5000/api/login',
+        'https://power-hack-server-abjy.onrender.com/api/login',
         {
             method: 'POST',
             headers: {
@@ -39,13 +40,36 @@ export const login = createAsyncThunk('auth/login',async(data)=>{
     );
     const result = await res.json(); 
     if(result){
+        localStorage.setItem('accessToken', result.token);
         return {result,data}
+    }
+})
+export const getMe = createAsyncThunk('auth/getMe',()=>{
+        const { data, isLoading } = useQuery('getMe', () => fetch(`https://power-hack-server-abjy.onrender.com/api/login`, {
+        method: 'GET',
+        headers: {
+            'authorization': `Bearer ${localStorage.getItem('accessToken')}`
+        }
+    }).then(res => res.json())
+        )
+        console.log(data)
+    if(data){
+        return data
     }
 })
 
 const authSlice = createSlice({
     name: "auth",
     initialState,
+    reducers:{
+        logOut: (state) => {
+            state.user = { email: "", token: "" }
+            localStorage.removeItem('accessToken')
+        },
+        toogleLoading: (state) => {
+            state.isLoading = false
+        }
+    },
     extraReducers: (builder) => {
         builder
             .addCase(createUser.pending, (state) => {
@@ -86,7 +110,26 @@ const authSlice = createSlice({
                 state.user.token = "";
                 state.error = action.error.message;
             })
+            .addCase(getMe.pending, (state) => {
+                state.isLoading = true;
+                state.isError = false;
+                state.error = "";
+            })
+            .addCase(getMe.fulfilled, (state, { payload }) => {
+                state.isLoading = false;
+                state.user.email = payload.user
+                state.isError = false;
+                state.error = "";
+            })
+            .addCase(getMe.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.user.email = "";
+                state.user.token = "";
+                state.error = action.error.message;
+            })
         }
     })
 
+    export const{ logOut,toogleLoading}= authSlice.actions
     export default authSlice.reducer

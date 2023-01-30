@@ -1,16 +1,18 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { logOut } from '../../../features/auth/authSlice';
 
 const Navbar = () => {
 
   const { isLoading, user, isError, error } = useSelector(state => state.auth)
+  const dispatch= useDispatch()
     const menuItem= <React.Fragment>
         <li><Link to='/'>Home</Link></li>
         <li><Link to='/about'>About</Link></li>
-        { user?.email ?
+        { !user?.email ?
           <li><Link to='/login'>Login</Link></li> : 
-          <button><Link to='/login'>Logout</Link></button>}
+          <button onClick={()=>dispatch(logOut())}>Logout</button>}
         <li><Link to='/bill'>Bill</Link></li>
     </React.Fragment>
     return (
