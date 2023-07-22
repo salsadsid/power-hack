@@ -18,7 +18,7 @@ async function verifyJWT(req,res,next){
         if (!token) {
             res.status(401).json({
                 status: "Fail",
-                error: "You are not logged in"
+                error: "You are not signed in"
             })
         }
 
